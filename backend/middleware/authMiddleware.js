@@ -6,6 +6,9 @@ async function verifyToken(req,res,next) {
         return res.status(401).json({message: "Token not found in headers"})
     }
     const token = authHead.split(" ")[1]
+    if(!token){
+        return res.status(401).json({message: "Invalid Token Format"})
+    }
     try{
         const verify = jwt.verify(token,process.env.JWT_SECRET)
         req.user = verify
