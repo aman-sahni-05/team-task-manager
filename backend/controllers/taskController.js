@@ -3,8 +3,14 @@ const pool = require('../config/db.js')
 async function createTask(req,res,next) {
     try{
         const userId = req.user.id
-        const project_info = await pool.query(`SELECT id FROM projects`)
-        const insertedTask = await pool.query(`INSERT INTO tasks (title,description,project_id,due_date,created_by,assigned_to) VALUES ($1,$2,$3,'2026-06-25',$4,$5) RETURNING *`, [req.body.title, req.body.description, project_info.rows[0].id,userId,userId])
+        const title = req.body.title
+        const project_id = req.body.project_id;
+        const due_date = req.body.due_date
+        const assigned_to = req.body.assigned_to
+        if(!title || !project_id || !due_date || !assigned_to){
+            return res.status(400).json({message: "Please Enter required fields"})
+        }
+        const insertedTask = await pool.query(`INSERT INTO tasks (title,description,project_id,due_date,created_by,assigned_to) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *`, [title, req.body.description,project_id,due_date,userId,assigned_to])
         res.json(insertedTask.rows[0])
     }catch(err){
         next(err)

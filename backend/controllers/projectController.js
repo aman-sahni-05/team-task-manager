@@ -5,7 +5,13 @@ const pool = require('../config/db.js')
 async function createProject(req,res,next) {
     try{
         const userId = req.user.id
-        const insertedProject = await pool.query(`INSERT INTO projects (name,description,due_date,created_by) VALUES ($1,$2,$3,$4) RETURNING *`,[req.body.name,req.body.description,req.body.due_date,userId])
+        const project_name = req.body.name
+        const project_description = req.body.description
+        const due_date = req.body.due_date
+        if(!project_name || !project_description || !due_date){
+            return res.status(400).json({message: "Please enter required details"})
+        }
+        const insertedProject = await pool.query(`INSERT INTO projects (name,description,due_date,created_by) VALUES ($1,$2,$3,$4) RETURNING *`,[project_name,project_description,due_date,userId])
         res.json(insertedProject.rows[0])
     }catch(err){
         next(err)
