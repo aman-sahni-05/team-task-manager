@@ -31,8 +31,8 @@ async function allTasks(req,res,next) {
 async function updateTask(req,res,next) {
     try{
         const userId = req.user.id;
-        const id = req.params.id
-        const updatedTask = await pool.query(`UPDATE tasks SET title=$1,description=$2,due_date=$3 ,updated_at=now() WHERE id=$4 AND created_by=$5 RETURNING *`, [req.body.title,req.body.description,req.body.due_date,id,userId])
+        const taskId = req.params.id
+        const updatedTask = await pool.query(`UPDATE tasks SET title=$1,description=$2,due_date=$3 ,updated_at=now() WHERE id=$4 AND created_by=$5 RETURNING *`, [req.body.title,req.body.description,req.body.due_date,taskId,userId])
         if(updatedTask.rowCount === 0){
             return res.status(404).json({message: "task not found"})
         }
