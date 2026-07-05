@@ -1,3 +1,4 @@
+
 const e = require('express')
 const pool = require('../config/db.js')
 
@@ -108,5 +109,16 @@ async function removeMembers(req,res,next) {
 }
 
 
+async function getProjectTasks(req,res,next) {
+    try{
+        const projectId = req.params.id
+        const userId = req.user.id
+        const tasksInProject = await pool.query(`SELECT * FROM tasks WHERE project_id=$1 AND (created_by=$2 OR assigned_to=$2)`, [projectId,userId])
+        res.json(tasksInProject.rows)
+    }catch(err){
+        next(err)
+    }
+}
 
-module.exports = {createProject,allProjects,updateProject,deleteProject,addMembers,removeMembers}
+
+module.exports = {createProject,allProjects,updateProject,deleteProject,addMembers,removeMembers,getProjectTasks}
