@@ -1,6 +1,7 @@
 import { getProjects } from "../services/projectServices"
 import { useState } from "react"
 import { useEffect } from "react"
+import { Link } from "react-router-dom"
 
 export default function Dashboard(){
     const [projects, setProjects] = useState([])
@@ -20,7 +21,7 @@ export default function Dashboard(){
     return(
         <>
         {projects.map((data) => {
-            return <li key={data.id}>{data.name}</li>
+            return <li key={data.id}><Link to={`/projects/${data.id}`}>{data.name}</Link></li>
         })}
         </>
     )
