@@ -1,6 +1,7 @@
+import { apiFetch } from "./apiHelper"
 
 async function login(username,password){
-    const response = await fetch("http://localhost:5000/auth/login",{
+    const response = await apiFetch("http://localhost:5000/auth/login",{
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
@@ -15,7 +16,7 @@ async function login(username,password){
 }
 
 async function register(name,email,username,password) {
-    const response = await fetch("http://localhost:5000/auth/register",{
+    const response = await apiFetch("http://localhost:5000/auth/register",{
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
